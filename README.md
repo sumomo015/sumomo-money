@@ -1,1 +1,1 @@
-# sumomo-money
+# SUMOMO-MONEY
