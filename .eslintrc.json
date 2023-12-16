@@ -1,0 +1,201 @@
+{
+  "root": true,
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "parser": {
+      "ts": "@typescript-eslint/parser",
+      "js": "@typescript-eslint/parser",
+      "<template>": "espree"
+    },
+    "project": true,
+    "tsconfigRootDir": "__dirname",
+    "extraFileExtensions": [".vue"]
+  },
+  "env": {
+    "node": true
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
+    "plugin:vue/vue3-recommended",
+    "@unocss",
+    "prettier"
+  ],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.mts", "*.cts", "*.vue"],
+      "rules": {
+        // The core "no-unused-vars" rules (in the eslint:recommended ruleset)
+        // does not work with type definitions.
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/unbound-method": "off",
+        "no-console": "error"
+      }
+    },
+    {
+      // Include typescript eslint rules in *.vue files
+      // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/eslint-recommended.ts
+      "files": ["*.vue"],
+      "rules": {
+        "constructor-super": "off", // ts(2335) & ts(2377)
+        "getter-return": "off", // ts(2378)
+        "no-const-assign": "off", // ts(2588)
+        "no-dupe-args": "off", // ts(2300)
+        "no-dupe-class-members": "off", // ts(2393) & ts(2300)
+        "no-dupe-keys": "off", // ts(1117)
+        "no-func-assign": "off", // ts(2539)
+        "no-import-assign": "off", // ts(2539) & ts(2540)
+        "no-new-symbol": "off", // ts(7009)
+        "no-obj-calls": "off", // ts(2349)
+        "no-redeclare": "off", // ts(2451)
+        "no-setter-return": "off", // ts(2408)
+        "no-this-before-super": "off", // ts(2376)
+        "no-undef": "off", // ts(2304)
+        "no-unreachable": "off", // ts(7027)
+        "no-unsafe-negation": "off", // ts(2365) & ts(2360) & ts(2358)
+        "no-var": "error", // ts transpiles let/const to var, so no need for vars any more
+        "prefer-const": "error", // ts provides better types with const
+        "prefer-rest-params": "error", // ts provides better types with rest args over arguments
+        "prefer-spread": "error", // ts transpiles spread to apply, so no need for manual apply
+        "valid-typeof": "off" // ts(2367)
+      }
+    },
+    {
+      "files": [
+        // These pages are not used directly by users so they can have one-word names.
+        "**/pages/**/*.{js,ts,vue}",
+        "**/layouts/**/*.{js,ts,vue}",
+        "**/app.{js,ts,vue}",
+        "**/error.{js,ts,vue}",
+        // These files should have multiple words in their names as they are within subdirectories.
+        "**/components/*/**/*.{js,ts,vue}"
+      ],
+      "rules": { "vue/multi-word-component-names": "off" }
+    },
+    {
+      // Pages and layouts are required to have a single root element if transitions are enabled.
+      "files": ["**/pages/**/*.{js,ts,vue}", "**/layouts/**/*.{js,ts,vue}"],
+      "rules": { "vue/no-multiple-template-root": "error" }
+    },
+    /* 以下がVueのカスタムルール */
+    {
+      "files": ["*.vue"],
+      "rules": {
+        // typescriptを使用すること
+        "vue/block-lang": [
+          "error",
+          {
+            "script": {
+              "lang": "ts"
+            }
+          }
+        ],
+        // setup文法を使用すること
+        "vue/component-api-style": ["error", ["script-setup"]],
+        // ブロックの順序を指定
+        // script, template, styleの順
+        "vue/block-order": [
+          "error",
+          {
+            "order": ["script", "template", "style"]
+          }
+        ],
+        // emitのイベント名をキャメルケースにすること
+        "vue/custom-event-name-casing": ["error", "camelCase"],
+        // emitを明示的に宣言すること
+        "vue/require-explicit-emits": "error",
+        // emitの定義方法を指定
+        "vue/define-emits-declaration": ["error", "type-based"],
+        // definePropsの定義方法を指定
+        "vue/define-props-declaration": ["error", "type-based"],
+        // defineProps と defineEmits の順序を指定
+        "vue/define-macros-order": [
+          "error",
+          {
+            "order": [
+              "defineOptions",
+              "defineProps",
+              "defineEmits",
+              "defineSlots"
+            ]
+          }
+        ],
+        // button要素にtype属性を指定すること
+        "vue/html-button-has-type": [
+          "error",
+          {
+            "button": true,
+            "submit": true,
+            "reset": true
+          }
+        ],
+        // 各ブラックの最大行数を指定
+        "vue/max-lines-per-block": [
+          "error",
+          {
+            "template": 50,
+            "script": 100,
+            "style": 50,
+            "skipBlankLines": true
+          }
+        ],
+        // 空のブロックを禁止
+        "vue/no-empty-component-block": "error",
+        // classに複数のオブジェクトを指定しないこと
+        "vue/no-multiple-objects-in-class": "error",
+        // リアクティブ性が失われないようにすること
+        "vue/no-ref-object-reactivity-loss": "error",
+        // propsのoptional型を指定すること
+        "vue/no-required-prop-with-default": "error",
+        // root要素にv-ifを指定しないこと
+        "vue/no-root-v-if": "error",
+        // インラインスタイルを禁止
+        "vue/no-static-inline-styles": "error",
+        // '_blank'のセキュリティリスクを回避
+        "vue/no-template-target-blank": "error",
+        // v-forとv-ifを同時に使用しないこと
+        "vue/no-use-v-else-with-v-for": "error",
+        // v-textを使用しないこと
+        "vue/no-v-text": "error",
+        // defineOptionsを使用すること
+        "vue/prefer-define-options": "error",
+        // 静的なclassを正しく使用すること
+        "vue/prefer-separate-static-class": "error",
+        // propsのショートハンドを使用すること
+        "vue/prefer-true-attribute-shorthand": "error",
+        // refに明示的に型を指定すること
+        "vue/require-typed-ref": "error",
+        // v-onの書き方を指定
+        "vue/v-on-handler-style": "error"
+      }
+    },
+    /* 以下がTypeScriptのカスタムルール */
+    {
+      "files": ["*.ts"],
+      "rules": {
+        // tsファイルの最大行数を150行に制限
+        "max-lines": [
+          "error",
+          {
+            "max": 150,
+            "skipBlankLines": true,
+            "skipComments": true
+          }
+        ]
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "node_modules",
+    ".nuxt",
+    ".output",
+    ".nitro",
+    ".cache",
+    "dist",
+    ".histoire"
+  ]
+}
